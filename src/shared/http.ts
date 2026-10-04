@@ -8,7 +8,7 @@ import express, {
   type NextFunction,
   type RequestHandler,
 } from "express";
-import { getHost, getMcpApiKey } from "./env.js";
+import { getAllowedHosts, getHost, getMcpApiKey } from "./env.js";
 import { closeSql } from "./db.js";
 import { resetDemoSeed } from "./seed.js";
 import { mountDocs } from "./openapi.js";
@@ -31,7 +31,7 @@ export function createAppServer(opts: {
       ? createMcpExpressApp()
       : createMcpExpressApp({
           host: "0.0.0.0",
-          allowedHosts: [host, "localhost", "127.0.0.1"],
+          allowedHosts: getAllowedHosts(),
         });
 
   // Ensure REST / Postman JSON bodies are parsed (MCP path also benefits).

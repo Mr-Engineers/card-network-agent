@@ -93,3 +93,20 @@ DEMO_SEED=dispute_v1
 ```
 
 Optional: set `MCP_API_KEY` and send `Authorization: Bearer …` or `X-Api-Key`.
+
+## AWS (ECS)
+
+The Network Portal (`src/network`) runs as the `one-dev-card-network` service in
+`one-dev-cluster-2`, public on the backend-2 load balancer on port 8443
+(`terraform output card_network_url`; same certificate and CA as backend-2). The Case Desk
+server of this repo is not deployed (that is `case-desk-agent`).
+
+Through the proxy agents call it as `/apps/card_network/v1/...`; register the app once with
+[`deploy/proxy-app.sql`](./deploy/proxy-app.sql). `MCP_API_KEY` is the marketplace's
+`MARKETPLACE_API_TOKEN`, which proxy-server sends as Bearer. `DATABASE_URL` comes from SSM
+`/one/dev/dispute/DATABASE_URL`. Note: `POST /demo/reset` here resets both `dispute_network`
+and `dispute_case_desk` (the deployed case-desk data), not `dispute_case_desk_test`.
+
+CI (`.github/workflows/deploy.yml`): push to `main` -> typecheck, image to ECR
+`one-dev-card-network`, new deployment of the service. Infrastructure:
+`one-infrastructure/ecs_card_network.tf`.

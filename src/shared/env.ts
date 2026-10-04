@@ -34,6 +34,19 @@ export function getHost(): string {
   return process.env.MCP_HOST?.trim() || "127.0.0.1";
 }
 
+/**
+ * Host headers accepted when bound to a non-loopback address (comma-separated, without ports).
+ * Empty: no Host check - behind Service Connect / a load balancer the Host header is the
+ * service name, the ALB DNS name or the task IP; access is protected by MCP_API_KEY.
+ */
+export function getAllowedHosts(): string[] | undefined {
+  const hosts = (process.env.MCP_ALLOWED_HOSTS ?? "")
+    .split(",")
+    .map((h) => h.trim())
+    .filter(Boolean);
+  return hosts.length ? hosts : undefined;
+}
+
 export function getPort(envName: string, fallback: number): number {
   const raw = process.env[envName]?.trim();
   if (!raw) return fallback;

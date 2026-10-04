@@ -1,0 +1,13 @@
+.git
+.github
+.env
+.env.*
+!.env.example
+node_modules
+dist
+docs
+plans
+supabase
+*.log
+Dockerfile
+README.md
