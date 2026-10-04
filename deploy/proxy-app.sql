@@ -29,7 +29,9 @@ values
   ('card_network', 'merchant_get', 'read', 'Merchant profile', 'GET', '/v1/merchants/{merchant_id}',
    '{"merchant_id": "$.merchant_id"}'),
   ('card_network', 'dispute_get', 'read', 'Network dispute with merchant representation', 'GET',
-   '/v1/disputes/{dispute_id}', '{"dispute_id": "$.dispute_id"}')
+   '/v1/disputes/{dispute_id}', '{"dispute_id": "$.dispute_id"}'),
+  ('card_network', 'dispute_get_by_txn', 'read', 'Latest network dispute of a transaction', 'GET',
+   '/v1/disputes', '{"txn_id": "$.txn_id"}')
 on conflict (app_id, name) do update set http_method = excluded.http_method, http_path = excluded.http_path,
   args = excluded.args, description = excluded.description;
 

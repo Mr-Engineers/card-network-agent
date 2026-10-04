@@ -47,6 +47,20 @@ export function registerNetworkRest(app: Express, auth: RequestHandler) {
     }
   });
 
+  // Latest dispute of a transaction (cases in Case Desk know the txn, not the dispute id)
+  app.get("/v1/disputes", auth, async (req, res) => {
+    try {
+      const txnId = typeof req.query.txn_id === "string" ? req.query.txn_id : "";
+      if (!txnId) {
+        res.status(400).json({ error: { message: "txn_id query parameter is required" } });
+        return;
+      }
+      res.json(await svc.getDispute({ txnId }));
+    } catch (err) {
+      sendError(res, err);
+    }
+  });
+
   app.post("/v1/disputes", auth, async (req, res) => {
     try {
       const { txn_id, reason_code } = req.body ?? {};

@@ -209,6 +209,24 @@ paths:
           description: Not found
 
   /v1/disputes:
+    get:
+      tags: [Tools]
+      summary: Latest dispute of a transaction (network.dispute.get by txn_id)
+      operationId: networkDisputeGetByTxn
+      parameters:
+        - name: txn_id
+          in: query
+          required: true
+          schema: { type: string, example: txn_189_travel }
+      responses:
+        "200":
+          description: Dispute (representation_text may contain injection)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dispute"
+        "404":
+          description: Not found
     post:
       tags: [Tools]
       summary: REST mirror of network.dispute.open
